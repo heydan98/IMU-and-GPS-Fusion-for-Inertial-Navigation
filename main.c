@@ -21,7 +21,7 @@ void quaternion_to_euler(float w, float x, float y, float z, float *X, float *Y,
 int main()
 {   
     float check_new[2];
-    char zero[]= "1\0";
+    char zero[]= "0";
     clock_t tic = clock();
     clock_t toc = clock();
 
@@ -31,7 +31,7 @@ int main()
     myshm a_1;
 
     char c[25 * 12];
-    char c_1[1];
+    char c_1[2];
     myshm_init(&a, 25 * 12, 112, 0644);
     myshm_init(&a_1, 4, 113, 0666);
 
@@ -67,21 +67,22 @@ int main()
             // printf("\n euler: %f,%f,%f", X*180/M_PI, Y*180/M_PI, Z*180/M_PI);
             qv_mult(q0, q1, q2, q3, 0.0, 0.0, 9.8);
             // printf("\n Q_mult_output: %f,%f,%f, %f", q_mult_output[0], q_mult_output[1], q_mult_output[2], q_mult_output[3]);
-            if (count >=100){
-                myshm_read(&a_1, c_1); 
-                int check_new[1];
-                sscanf(c_1, "%d", &check_new[0]);
-                printf("Check new %f\n",&check_new[0]);
-                if (check_new[0] == 1){
-                    printf("------------------------------------------------");
-                    printf("lat %f, lng %f", calibrated_data[9], calibrated_data[10]);
-                    myshm_write(&a_1, zero);  
-                
-                    // strcpy(c_1, zero);
-                    check_new[0] = 0;
-                    count = 0;
-                }
+            // if (count >=100){
+            myshm_read(&a_1, c_1); 
+            int check_new;
+            sscanf(c_1, "%d", &check_new);
+            printf("Check new %d\n",&check_new);
+            if (check_new == 1){
+                printf("------------------------------------------------\n");
+                printf("check new %d\n", &check_new);
+                printf("lat %f, lng %f\n", calibrated_data[9], calibrated_data[10]);
+                myshm_write(&a_1, &zero);
+            
+                strcpy(c_1, zero);
+                check_new = 0;
+                // count = 0;
             }
+            // }
         
         }
     }
