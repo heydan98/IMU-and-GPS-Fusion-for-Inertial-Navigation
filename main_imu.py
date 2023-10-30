@@ -202,6 +202,7 @@ while True:
 
                 bytesize=serial.EIGHTBITS,)
                 continue
+            if count>1000: count=150
 
 
         # print(calibrated_data )
@@ -227,7 +228,7 @@ while True:
 
         # print(count)
         if (count == 0):
-            byte_gps = bytes('1\0', "ascii")
+            byte_gps = bytes('1', "ascii")
             memrory_gps = memory_check_new_gps.write(byte_gps)        
             print(str_calibrated_data)
 
