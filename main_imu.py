@@ -18,9 +18,6 @@ import pynmea2
 import RPi.GPIO as GPIO
 import serial
 
-
-
-
 period = 1/100 #100Hz
 import time
 t0 = time.time()
@@ -40,23 +37,6 @@ while (time.time()-t0)<5: # wait for 5-sec to connect to IMU
 imu_devs   = ["ACCELEROMETER","GYROSCOPE","MAGNETOMETER"]
 imu_labels = ["x-dir","y-dir","z-dir"]
 imu_units  = ["g","g","g","dps","dps","dps","uT","uT","uT"]
-#
-#############################
-# Main Loop to Test IMU
-#############################
-#
-
-
-# calib_factors =[ [ 1.00389342, -0.01671072],
-# 	             [ 1.00844073, -0.0308995],
-# 	             [0.6732579,  0.35341465],
-# 	            [1, -0.9363937377929688],
-# 	            [1, 0.9118270874023438],
-# 	            [1, 0.6007766723632812],
-# 	            [1, 1.8310546875],
-# 	            [1, -10.546875],
-# 	            [1, -20.5078125]]
-
 
 calib_factors =[ [ 1.00257505, -0.01390942],
                   [-1.0004152,   0.03366062],
@@ -96,13 +76,10 @@ ser.write(b"$PUBX,40,GLL,0,0,0,0*5D\r\n")
 def PPS_interrupt(channel):
   print("PPS...")
 
-
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(pps, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.add_event_detect(pps, GPIO.FALLING, 
         callback=PPS_interrupt, bouncetime=100)
-
-
 
 def calibrated_value(input, m ,b):
     return input*m - b
